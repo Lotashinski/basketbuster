@@ -1,1 +1,33 @@
- 
+version: "3.9"
+services:
+  postgres-user-service:
+    image: postgres:13.3
+    networks:
+      - internal
+    container_name: postgres-user-service
+    environment:
+      POSTGRES_DB: ${USER_SERVICE_DB_NAME:-app}
+      POSTGRES_USER: ${USER_SERVICE_DB_USER:?error}
+      POSTGRES_PASSWORD: ${USER_SERVICE_DB_USER:?error}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./volumes/user-service-db:/var/lib/postgresql/data
+
+  user-service:
+    build: ./services/user-service
+    container_name: user-service
+    networks:
+      - internal
+    environment:
+      POSTGRES_DB_NAME: ${USER_SERVICE_DB_NAME:-app}
+      POSTGRES_DB_USER: ${USER_SERVICE_DB_USER:?error}
+      POSTGRES_DB_PASSWORD: ${USER_SERVICE_DB_USER:?error}
+      POSTGRES_DB_HOST: ${USER_SERVICE_DB_HOST:-postgres-user-service}
+      POSTGRES_DB_PORT: ${USER_SERVICE_DB_PORT:-5432}
+    depends_on:
+      - postgres-user-service
+
+networks:
+  internal:
+    driver: bridge
