@@ -6,6 +6,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,7 +14,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -51,12 +54,17 @@ public class StoreBranch {
     @JoinTable(
             name = "rel_store_branch_schedule_item",
             joinColumns = {
-                @JoinColumn(name = "store_id", referencedColumnName = "id")
+                @JoinColumn(name = "store_branch_id", referencedColumnName = "id")
             },
             inverseJoinColumns = {
                 @JoinColumn(name = "schedule_item_id", referencedColumnName = "id")
             }
     )
     private Map<Day, ScheduleItem> schedule;
+    
+    @OneToMany(mappedBy = "pk.storeBranch",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<BranchProduct> products = new HashSet<>();
     
 }
