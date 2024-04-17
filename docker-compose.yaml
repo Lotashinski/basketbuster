@@ -28,6 +28,35 @@ services:
     depends_on:
       - postgres-user-service
 
+
+  postgres-store-service:
+    image: postgres:13.3
+    networks:
+      - internal
+    container_name: postgres-store-service
+    environment:
+      POSTGRES_DB: ${STORE_SERVICE_DB_NAME:-app}
+      POSTGRES_USER: ${STORE_SERVICE_DB_USER:?error}
+      POSTGRES_PASSWORD: ${STORE_SERVICE_DB_PASSWORD:?error}
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./volumes/store-service-db:/var/lib/postgresql/data
+
+  store-service:
+    build: ./services/store-service
+    container_name: store-service
+    networks:
+      - internal
+    environment:
+      POSTGRES_DB_NAME: ${STORE_SERVICE_DB_NAME:-app}
+      POSTGRES_DB_USER: ${STORE_SERVICE_DB_USER:?error}
+      POSTGRES_DB_PASSWORD: ${STORE_SERVICE_DB_PASSWORD:?error}
+      POSTGRES_DB_HOST: ${STORE_SERVICE_DB_HOST:-postgres-store-service}
+      POSTGRES_DB_PORT: ${STORE_SERVICE_DB_PORT:-5432}
+    depends_on:
+      - postgres-store-service
+
 networks:
   internal:
     driver: bridge

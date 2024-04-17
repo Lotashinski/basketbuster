@@ -1,0 +1,120 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01.database-create
+      author: lotashinski
+      changes:
+        - createTable:
+            tableName: app_schedule_item
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+                        nullable: false
+                
+                - column:
+                    name: start_at
+                    type: time
+                    constraints:
+                        nullable: false
+
+                - column:
+                    name: end_at
+                    type: time
+                    constraints:
+                        nullable: false
+                    
+        - createTable:
+            tableName: app_store
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+                        nullable: false
+                
+                - column:
+                    name: title
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+                
+                - column:
+                    name: description
+                    type: clob
+                    constraints:
+                        nullable: false
+        
+        - createTable:
+            tableName: app_store_branch
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+                        nullable: false
+
+                - column:
+                    name: address
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+        
+                - column:
+                    name: position_latitude
+                    type: double
+                    constraints:
+                        nullable: false
+                
+                - column:
+                    name: position_longitude
+                    type: double
+                    constraints:
+                        nullable: false
+        
+        - createTable:
+            tableName: rel_store_branch_schedule_item
+            columns:
+                - column:
+                    name: store_id
+                    type: bigint
+                    constraints:
+                        nullable: false
+                        
+                - column:
+                    name: schedule_item_id
+                    type: bigint
+                    constraints:
+                        nullable: false
+                        
+                - column:
+                    name: schedule_key
+                    type: number(2)
+                    constraints:
+                        nullable: false
+                
+        
+        - addForeignKeyConstraint:
+            baseColumnNames: schedule_item_id
+            baseTableName: rel_store_branch_schedule_item
+            constraintName: fk_rel_store_branch_schedule_item_schedule_item
+            referencedColumnNames: id
+            referencedTableName: app_schedule_item
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+        
+        - addForeignKeyConstraint:
+            baseColumnNames: store_id
+            baseTableName: rel_store_branch_schedule_item
+            constraintName: fk_rel_store_branch_schedule_item_store_id
+            referencedColumnNames: id
+            referencedTableName: app_store
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+
