@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
@@ -45,7 +46,7 @@ public class Product {
     @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
     private Set<Category> categories = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     private Set<UserReview> reviews = new HashSet<>();
     
 }

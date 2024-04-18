@@ -61,11 +61,11 @@ services:
     image: postgres:13.3
     networks:
       - internal
-    container_name: postgres-user-service
+    container_name: postgres-product-service
     environment:
-      POSTGRES_DB: ${USER_SERVICE_DB_NAME:-app}
-      POSTGRES_USER: ${USER_SERVICE_DB_USER:?error}
-      POSTGRES_PASSWORD: ${USER_SERVICE_DB_PASSWORD:?error}
+      POSTGRES_DB: ${PRODUCT_SERVICE_DB_NAME:-app}
+      POSTGRES_USER: ${PRODUCT_SERVICE_DB_USER:?error}
+      POSTGRES_PASSWORD: ${PRODUCT_SERVICE_DB_PASSWORD:?error}
     ports:
       - "5434:5432"
     volumes:
@@ -77,11 +77,11 @@ services:
     networks:
       - internal
     environment:
-      POSTGRES_DB_NAME: ${USER_SERVICE_DB_NAME:-app}
-      POSTGRES_DB_USER: ${USER_SERVICE_DB_USER:?error}
-      POSTGRES_DB_PASSWORD: ${USER_SERVICE_DB_PASSWORD:?error}
-      POSTGRES_DB_HOST: ${USER_SERVICE_DB_HOST:-postgres-user-service}
-      POSTGRES_DB_PORT: ${USER_SERVICE_DB_PORT:-5432}
+      POSTGRES_DB_NAME: ${PRODUCT_SERVICE_DB_NAME:-app}
+      POSTGRES_DB_USER: ${PRODUCT_SERVICE_DB_USER:?error}
+      POSTGRES_DB_PASSWORD: ${PRODUCT_SERVICE_DB_PASSWORD:?error}
+      POSTGRES_DB_HOST: ${PRODUCT_SERVICE_DB_HOST:-postgres-product-service}
+      POSTGRES_DB_PORT: ${PRODUCT_SERVICE_DB_PORT:-5432}
     depends_on:
       - postgres-product-service
 

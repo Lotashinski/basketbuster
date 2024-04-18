@@ -1,0 +1,157 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01.database-create
+      author: lotashinski
+      changes:
+        - createTable:
+            tableName: app_category
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+                        nullable: false
+                
+                - column:
+                    name: owner_id
+                    type: bigint
+                    constraints:
+                        nullable: true
+                
+                - column:
+                    name: title
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+                        unique: true
+                    
+        - createTable:
+            tableName: app_product
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+                        nullable: false
+
+                - column:
+                    name: url
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+                        unique: true
+                
+                - column:
+                    name: title
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+        
+        - createTable:
+            tableName: app_user_review
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+                        nullable: false
+
+                - column:
+                    name: url
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+                
+                - column:
+                    name: product_id
+                    type: bigint
+                    constraints:
+                        nullable: false
+                
+        - createTable:
+            tableName: collection_product_photos
+            columns:
+                - column:
+                    name: product_id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+                        nullable: false
+
+                - column:
+                    name: photo_href
+                    type: varchar(255)
+                    constraints:
+                        primaryKey: true
+                        nullable: false
+        
+        - createTable:
+            tableName: rel_category_product
+            columns:
+                - column:
+                    name: category_id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+                        nullable: false
+
+                - column:
+                    name: product_id
+                    type: bigint
+                    constraints:
+                        primaryKey: true
+                        nullable: false
+        
+        - addForeignKeyConstraint:
+            constraintName: fk_app_category_app_category
+            baseColumnNames: owner_id
+            baseTableName: app_category
+            referencedColumnNames: id
+            referencedTableName: app_category
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+        
+        - addForeignKeyConstraint:
+            constraintName: fk_app_user_review_app_product
+            baseColumnNames: product_id
+            baseTableName: app_user_review
+            referencedColumnNames: id
+            referencedTableName: app_product
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+        
+        - addForeignKeyConstraint:
+            constraintName: fk_collection_product_photos_app_product
+            baseColumnNames: product_id
+            baseTableName: collection_product_photos
+            referencedColumnNames: id
+            referencedTableName: app_product
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+        
+        - addForeignKeyConstraint:
+            constraintName: fk_rel_category_product_app_product
+            baseColumnNames: product_id
+            baseTableName: rel_category_product
+            referencedColumnNames: id
+            referencedTableName: app_product
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            
+        - addForeignKeyConstraint:
+            constraintName: fk_rel_category_product_app_category
+            baseColumnNames: category_id
+            baseTableName: rel_category_product
+            referencedColumnNames: id
+            referencedTableName: app_category
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+
