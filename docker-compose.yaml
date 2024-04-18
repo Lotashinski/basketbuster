@@ -100,7 +100,7 @@ services:
     volumes:
       - ./volumes/order-service-db:/var/lib/postgresql/data
 
-  oder-service:
+  order-service:
     build: ./services/order-service
     container_name: order-service
     networks:

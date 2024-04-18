@@ -1,0 +1,205 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01.database-create
+      author: lotashinski
+      changes:
+        - createTable:
+            tableName: app_order
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+                        nullable: false
+                
+                - column:
+                    name: created_at
+                    type: time(8)
+                    constraints:
+                        nullable: false
+                
+                - column:
+                    name: finished_at
+                    type: time(8)
+                    constraints:
+                        nullable: true
+                        
+                - column:
+                    name: is_pickup
+                    type: boolean
+                    constraints:
+                        nullable: false
+                
+                - column:
+                    name: store_branch_id
+                    type: bigint
+                    constraints:
+                        nullable: false
+                    
+                - column:
+                    name: user_id
+                    type: bigint
+                    constraints:
+                        nullable: false
+                
+                - column:
+                    name: address
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+                
+                - column:
+                    name: contact_phone
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+                        
+                - column: # todo status varchar(255) not null check (status in ('CANCELLED','IN_PROCESSIONG','PROCESSED','DELIVERED','AT_THE_POINT','COMPLETED'))
+                    name: status
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+        
+        - createTable:
+            tableName: app_order_item
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+                        nullable: false
+                        
+                - column:
+                    name: product_id
+                    type: bigint
+                    constraints:
+                        nullable: false
+                
+                - column:
+                    name: cost_per_item
+                    type: numeric(38,2)
+                    constraints:
+                        nullable: false
+                        
+                - column:
+                    name: count
+                    type: smallint
+                    constraints:
+                        nullable: false
+                
+                - column:
+                    name: order_id
+                    type: bigint
+                    constraints:
+                        nullable: false
+               
+        - createTable:
+            tableName: app_product
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+                        nullable: false
+                        
+                - column:
+                    name: title
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+               
+                - column:
+                    name: url
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+        
+        - createTable:
+            tableName: app_store_branch
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+                        nullable: false
+                        
+                - column:
+                    name: store_title
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+                        
+                - column:
+                    name: url_branch
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+                
+                - column:
+                    name: url_store
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+                        
+        - createTable:
+            tableName: app_user
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+                        nullable: false
+                        
+                - column:
+                    name: url
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+
+               
+        - addForeignKeyConstraint:
+            constraintName: fk_app_order_app_store_branch
+            baseColumnNames: store_branch_id
+            baseTableName: app_order
+            referencedColumnNames: id
+            referencedTableName: app_store_branch
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            
+        - addForeignKeyConstraint:
+            constraintName: fk_app_order_app_user
+            baseColumnNames: user_id
+            baseTableName: app_order
+            referencedColumnNames: id
+            referencedTableName: app_user
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            
+        - addForeignKeyConstraint:
+            constraintName: fk_app_order_item_app_order
+            baseColumnNames: order_id
+            baseTableName: app_order_item
+            referencedColumnNames: id
+            referencedTableName: app_order
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            
+        - addForeignKeyConstraint:
+            constraintName: fk_app_order_item_app_product
+            baseColumnNames: product_id
+            baseTableName: app_order_item
+            referencedColumnNames: id
+            referencedTableName: app_product
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+

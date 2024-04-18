@@ -2,6 +2,8 @@ package com.github.lotashinski.basketbuster.orderservice.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -41,6 +43,7 @@ public class Order {
     @Column(name = "finished_at")
     private LocalTime finishedAt;
     
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private Status status = Status.IN_PROCESSIONG;
     
