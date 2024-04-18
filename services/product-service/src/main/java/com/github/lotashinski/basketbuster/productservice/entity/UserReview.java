@@ -1,4 +1,4 @@
-package com.github.lotashinski.basketbuster.userservice.entity;
+package com.github.lotashinski.basketbuster.productservice.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,7 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,18 +21,11 @@ public class UserReview {
     @Column(name = "id", nullable = false)
     private Long id;
     
-    @Column(name = "text", nullable = false)
-    private String text;
+    @Column(name = "uri", nullable = false, unique = true)
+    private String uri;
     
-    @Column(name = "stars", nullable = false)
-    private int stars;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reviews")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
     
 }
