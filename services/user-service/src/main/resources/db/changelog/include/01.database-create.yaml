@@ -1,0 +1,91 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01.database-create
+      author: lotashinski
+      changes:
+        - createTable:
+            tableName: app_user
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+
+                - column:
+                    name: email
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+                        unique: true
+                    
+        - createTable:
+            tableName: app_product
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+
+                - column:
+                    name: title
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+                        unique: true
+        
+        - createTable:
+            tableName: app_user_review
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+
+                - column:
+                    name: text
+                    type: clob
+                    constraints:
+                        nullable: false
+              
+                - column:
+                    name: stars
+                    type: smallint
+                    constraints:
+                        nullable: false
+        
+                - column:
+                    name: user_id
+                    type: bigint
+                    constraints:
+                        nullable: false
+                
+                - column:
+                    name: product_id
+                    type: bigint
+                    constraints:
+                        nullable: false
+              
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: app_user_review
+            constraintName: fk_user_review_user
+            referencedColumnNames: id
+            referencedTableName: app_user
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+        
+        - addForeignKeyConstraint:
+            baseColumnNames: product_id
+            baseTableName: app_user_review
+            constraintName: fk_user_review_product
+            referencedColumnNames: id
+            referencedTableName: app_product
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+

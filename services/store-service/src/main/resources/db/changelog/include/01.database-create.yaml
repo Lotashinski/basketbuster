@@ -1,0 +1,178 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01.database-create
+      author: lotashinski
+      changes:
+        - createTable:
+            tableName: app_branch_product
+            columns:
+                - column:
+                    name: product_id
+                    type: bigint
+                    constraints:
+                        primaryKey: true
+                
+                - column:
+                    name: store_branch_id
+                    type: bigint
+                    constraints:
+                        primaryKey: true
+                        nullable: false
+                
+                - column:
+                    name: cost
+                    type: numeric(38,2)
+                    constraints:
+                        nullable: false
+          
+        - createTable:
+            tableName: app_product
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+
+                - column:
+                    name: title
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+        
+        - createTable:
+            tableName: app_schedule_item
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+                
+                - column:
+                    name: start_at
+                    type: time(6)
+                    constraints:
+                        nullable: false
+                
+                - column:
+                    name: end_at
+                    type: time(6)
+                    constraints:
+                        nullable: false
+                
+        - createTable:
+            tableName: app_store
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+                
+                - column:
+                    name: title
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+                
+                - column:
+                    name: description
+                    type: clob
+                    constraints:
+                        nullable: false
+        
+        - createTable:
+            tableName: app_store_branch
+            columns:
+                - column:
+                    name: id
+                    type: bigint
+                    autoIncrement: true
+                    constraints:
+                        primaryKey: true
+
+                - column:
+                    name: address
+                    type: varchar(255)
+                    constraints:
+                        nullable: false
+                
+                - column:
+                    name: description
+                    type: text
+                    constraints:
+                        nullable: false
+                
+                - column:
+                    name: position_latitude
+                    type: double
+                    constraints:
+                        nullable: false
+                
+                - column:
+                    name: position_longitude
+                    type: double
+                    constraints:
+                        nullable: false
+        
+        - createTable:
+            tableName: rel_store_branch_schedule_item
+            columns:
+                - column:
+                    name: store_branch_id
+                    type: bigint
+                    constraints:
+                        primaryKey: true
+                        
+                - column:
+                    name: schedule_item_id
+                    type: bigint
+                    constraints:
+                        primaryKey: true
+                        
+                - column:
+                    name: schedule_key
+                    type: number(2)
+                    constraints:
+                        nullable: false
+              
+        - addForeignKeyConstraint:
+            baseColumnNames: schedule_item_id
+            baseTableName: rel_store_branch_schedule_item
+            constraintName: fk_rel_store_branch_schedule_item_app_schedule_item
+            referencedColumnNames: id
+            referencedTableName: app_schedule_item
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+        
+        - addForeignKeyConstraint:
+            baseColumnNames: store_branch_id
+            baseTableName: rel_store_branch_schedule_item
+            constraintName: fk_rel_store_branch_schedule_item_app_store_branch
+            referencedColumnNames: id
+            referencedTableName: app_store_branch
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            
+        - addForeignKeyConstraint:
+            baseColumnNames: product_id
+            baseTableName: app_branch_product
+            constraintName: fk_app_branch_product_app_product
+            referencedColumnNames: id
+            referencedTableName: app_product
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+        
+        - addForeignKeyConstraint:
+            baseColumnNames: store_branch_id
+            baseTableName: app_branch_product
+            constraintName: fk_app_branch_product_app_store_branch
+            referencedColumnNames: id
+            referencedTableName: app_store_branch
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+

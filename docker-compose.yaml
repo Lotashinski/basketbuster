@@ -1,0 +1,121 @@
+version: "3.9"
+services:
+  postgres-user-service:
+    image: postgres:13.3
+    networks:
+      - internal
+    container_name: postgres-user-service
+    environment:
+      POSTGRES_DB: ${USER_SERVICE_DB_NAME:-app}
+      POSTGRES_USER: ${USER_SERVICE_DB_USER:?error}
+      POSTGRES_PASSWORD: ${USER_SERVICE_DB_PASSWORD:?error}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./volumes/user-service-db:/var/lib/postgresql/data
+
+  user-service:
+    build: ./services/user-service
+    container_name: user-service
+    networks:
+      - internal
+    environment:
+      POSTGRES_DB_NAME: ${USER_SERVICE_DB_NAME:-app}
+      POSTGRES_DB_USER: ${USER_SERVICE_DB_USER:?error}
+      POSTGRES_DB_PASSWORD: ${USER_SERVICE_DB_PASSWORD:?error}
+      POSTGRES_DB_HOST: ${USER_SERVICE_DB_HOST:-postgres-user-service}
+      POSTGRES_DB_PORT: ${USER_SERVICE_DB_PORT:-5432}
+    depends_on:
+      - postgres-user-service
+
+
+  postgres-store-service:
+    image: postgres:13.3
+    networks:
+      - internal
+    container_name: postgres-store-service
+    environment:
+      POSTGRES_DB: ${STORE_SERVICE_DB_NAME:-app}
+      POSTGRES_USER: ${STORE_SERVICE_DB_USER:?error}
+      POSTGRES_PASSWORD: ${STORE_SERVICE_DB_PASSWORD:?error}
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./volumes/store-service-db:/var/lib/postgresql/data
+
+  store-service:
+    build: ./services/store-service
+    container_name: store-service
+    networks:
+      - internal
+    environment:
+      POSTGRES_DB_NAME: ${STORE_SERVICE_DB_NAME:-app}
+      POSTGRES_DB_USER: ${STORE_SERVICE_DB_USER:?error}
+      POSTGRES_DB_PASSWORD: ${STORE_SERVICE_DB_PASSWORD:?error}
+      POSTGRES_DB_HOST: ${STORE_SERVICE_DB_HOST:-postgres-store-service}
+      POSTGRES_DB_PORT: ${STORE_SERVICE_DB_PORT:-5432}
+    depends_on:
+      - postgres-store-service
+
+
+  postgres-product-service:
+    image: postgres:13.3
+    networks:
+      - internal
+    container_name: postgres-product-service
+    environment:
+      POSTGRES_DB: ${PRODUCT_SERVICE_DB_NAME:-app}
+      POSTGRES_USER: ${PRODUCT_SERVICE_DB_USER:?error}
+      POSTGRES_PASSWORD: ${PRODUCT_SERVICE_DB_PASSWORD:?error}
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./volumes/product-service-db:/var/lib/postgresql/data
+
+  product-service:
+    build: ./services/product-service
+    container_name: product-service
+    networks:
+      - internal
+    environment:
+      POSTGRES_DB_NAME: ${PRODUCT_SERVICE_DB_NAME:-app}
+      POSTGRES_DB_USER: ${PRODUCT_SERVICE_DB_USER:?error}
+      POSTGRES_DB_PASSWORD: ${PRODUCT_SERVICE_DB_PASSWORD:?error}
+      POSTGRES_DB_HOST: ${PRODUCT_SERVICE_DB_HOST:-postgres-product-service}
+      POSTGRES_DB_PORT: ${PRODUCT_SERVICE_DB_PORT:-5432}
+    depends_on:
+      - postgres-product-service
+
+
+  postgres-order-service:
+    image: postgres:13.3
+    networks:
+      - internal
+    container_name: postgres-order-service
+    environment:
+      POSTGRES_DB: ${ORDER_SERVICE_DB_NAME:-app}
+      POSTGRES_USER: ${ORDER_SERVICE_DB_USER:?error}
+      POSTGRES_PASSWORD: ${ORDER_SERVICE_DB_PASSWORD:?error}
+    ports:
+      - "5435:5432"
+    volumes:
+      - ./volumes/order-service-db:/var/lib/postgresql/data
+
+  order-service:
+    build: ./services/order-service
+    container_name: order-service
+    networks:
+      - internal
+    environment:
+      POSTGRES_DB_NAME: ${ORDER_SERVICE_DB_NAME:-app}
+      POSTGRES_DB_USER: ${ORDER_SERVICE_DB_USER:?error}
+      POSTGRES_DB_PASSWORD: ${ORDER_SERVICE_DB_PASSWORD:?error}
+      POSTGRES_DB_HOST: ${ORDER_SERVICE_DB_HOST:-postgres-order-service}
+      POSTGRES_DB_PORT: ${ORDER_SERVICE_DB_PORT:-5432}
+    depends_on:
+      - postgres-order-service
+
+
+networks:
+  internal:
+    driver: bridge
