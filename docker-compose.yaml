@@ -57,6 +57,7 @@ services:
     depends_on:
       - postgres-store-service
 
+
   postgres-product-service:
     image: postgres:13.3
     networks:

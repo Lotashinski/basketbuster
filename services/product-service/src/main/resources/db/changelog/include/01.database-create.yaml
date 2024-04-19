@@ -12,7 +12,6 @@ databaseChangeLog:
                     autoIncrement: true
                     constraints:
                         primaryKey: true
-                        nullable: false
                 
                 - column:
                     name: owner_id
@@ -35,7 +34,7 @@ databaseChangeLog:
                     type: bigint
                     autoIncrement: true
                     constraints:
-                        nullable: false
+                        primaryKey: true
                 
                 - column:
                     name: title
@@ -51,7 +50,7 @@ databaseChangeLog:
                     type: bigint
                     autoIncrement: true
                     constraints:
-                        nullable: false
+                        primaryKey: true
                 
                 - column:
                     name: product_id
@@ -68,14 +67,12 @@ databaseChangeLog:
                     autoIncrement: true
                     constraints:
                         primaryKey: true
-                        nullable: false
 
                 - column:
                     name: product_id
                     type: bigint
                     constraints:
                         primaryKey: true
-                        nullable: false
         
         - addForeignKeyConstraint:
             constraintName: fk_app_category_app_category

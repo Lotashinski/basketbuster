@@ -12,7 +12,6 @@ databaseChangeLog:
                     autoIncrement: true
                     constraints:
                         primaryKey: true
-                        nullable: false
 
                 - column:
                     name: email
@@ -29,7 +28,7 @@ databaseChangeLog:
                     type: bigint
                     autoIncrement: true
                     constraints:
-                        nullable: false
+                        primaryKey: true
 
                 - column:
                     name: title
@@ -47,7 +46,6 @@ databaseChangeLog:
                     autoIncrement: true
                     constraints:
                         primaryKey: true
-                        nullable: false
 
                 - column:
                     name: text

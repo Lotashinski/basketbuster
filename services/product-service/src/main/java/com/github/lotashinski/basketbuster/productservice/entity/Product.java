@@ -34,14 +34,6 @@ public class Product {
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
     
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(
-            name = "collection_product_photos",
-            joinColumns = {@JoinColumn(name = "product_id", nullable = false)}
-    )
-    @Column(name = "photo_href", nullable = false)
-    private Set<String> photos = new HashSet<>();
-    
     @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
     private Set<Category> categories = new HashSet<>();
 

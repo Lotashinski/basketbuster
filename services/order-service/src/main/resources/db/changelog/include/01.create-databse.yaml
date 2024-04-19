@@ -12,7 +12,6 @@ databaseChangeLog:
                     autoIncrement: true
                     constraints:
                         primaryKey: true
-                        nullable: false
                 
                 - column:
                     name: created_at
@@ -71,7 +70,6 @@ databaseChangeLog:
                     autoIncrement: true
                     constraints:
                         primaryKey: true
-                        nullable: false
                         
                 - column:
                     name: product_id
@@ -105,7 +103,6 @@ databaseChangeLog:
                     type: bigint
                     constraints:
                         primaryKey: true
-                        nullable: false
                         
                 - column:
                     name: title

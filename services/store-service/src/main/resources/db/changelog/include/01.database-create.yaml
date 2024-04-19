@@ -11,7 +11,6 @@ databaseChangeLog:
                     type: bigint
                     constraints:
                         primaryKey: true
-                        nullable: false
                 
                 - column:
                     name: store_branch_id
@@ -34,7 +33,7 @@ databaseChangeLog:
                     type: bigint
                     autoIncrement: true
                     constraints:
-                        nullable: false
+                        primaryKey: true
 
                 - column:
                     name: title
@@ -51,7 +50,6 @@ databaseChangeLog:
                     autoIncrement: true
                     constraints:
                         primaryKey: true
-                        nullable: false
                 
                 - column:
                     name: start_at
@@ -74,7 +72,6 @@ databaseChangeLog:
                     autoIncrement: true
                     constraints:
                         primaryKey: true
-                        nullable: false
                 
                 - column:
                     name: title
@@ -97,7 +94,6 @@ databaseChangeLog:
                     autoIncrement: true
                     constraints:
                         primaryKey: true
-                        nullable: false
 
                 - column:
                     name: address
@@ -130,14 +126,12 @@ databaseChangeLog:
                     name: store_branch_id
                     type: bigint
                     constraints:
-                        nullable: false
                         primaryKey: true
                         
                 - column:
                     name: schedule_item_id
                     type: bigint
                     constraints:
-                        nullable: false
                         primaryKey: true
                         
                 - column:
