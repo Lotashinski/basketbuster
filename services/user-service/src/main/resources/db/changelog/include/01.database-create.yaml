@@ -29,11 +29,10 @@ databaseChangeLog:
                     type: bigint
                     autoIncrement: true
                     constraints:
-                        primaryKey: true
                         nullable: false
 
                 - column:
-                    name: url
+                    name: title
                     type: varchar(255)
                     constraints:
                         nullable: false

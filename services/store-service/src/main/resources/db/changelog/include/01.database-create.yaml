@@ -12,12 +12,14 @@ databaseChangeLog:
                     constraints:
                         primaryKey: true
                         nullable: false
+                
                 - column:
                     name: store_branch_id
                     type: bigint
                     constraints:
                         primaryKey: true
                         nullable: false
+                
                 - column:
                     name: cost
                     type: numeric(38,2)
@@ -32,14 +34,8 @@ databaseChangeLog:
                     type: bigint
                     autoIncrement: true
                     constraints:
-                        primaryKey: true
                         nullable: false
-                - column:
-                    name: href
-                    type: varchar(255)
-                    constraints:
-                        nullable: false
-                        unique: true
+
                 - column:
                     name: title
                     type: varchar(255)
@@ -56,11 +52,13 @@ databaseChangeLog:
                     constraints:
                         primaryKey: true
                         nullable: false
+                
                 - column:
                     name: start_at
                     type: time(6)
                     constraints:
                         nullable: false
+                
                 - column:
                     name: end_at
                     type: time(6)

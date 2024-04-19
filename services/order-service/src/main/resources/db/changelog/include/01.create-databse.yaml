@@ -16,13 +16,13 @@ databaseChangeLog:
                 
                 - column:
                     name: created_at
-                    type: time(8)
+                    type: datetime
                     constraints:
                         nullable: false
                 
                 - column:
                     name: finished_at
-                    type: time(8)
+                    type: datetime
                     constraints:
                         nullable: true
                         
@@ -103,7 +103,6 @@ databaseChangeLog:
                 - column:
                     name: id
                     type: bigint
-                    autoIncrement: true
                     constraints:
                         primaryKey: true
                         nullable: false
@@ -113,77 +112,6 @@ databaseChangeLog:
                     type: varchar(255)
                     constraints:
                         nullable: false
-               
-                - column:
-                    name: url
-                    type: varchar(255)
-                    constraints:
-                        nullable: false
-        
-        - createTable:
-            tableName: app_store_branch
-            columns:
-                - column:
-                    name: id
-                    type: bigint
-                    autoIncrement: true
-                    constraints:
-                        primaryKey: true
-                        nullable: false
-                        
-                - column:
-                    name: store_title
-                    type: varchar(255)
-                    constraints:
-                        nullable: false
-                        
-                - column:
-                    name: url_branch
-                    type: varchar(255)
-                    constraints:
-                        nullable: false
-                
-                - column:
-                    name: url_store
-                    type: varchar(255)
-                    constraints:
-                        nullable: false
-                        
-        - createTable:
-            tableName: app_user
-            columns:
-                - column:
-                    name: id
-                    type: bigint
-                    autoIncrement: true
-                    constraints:
-                        primaryKey: true
-                        nullable: false
-                        
-                - column:
-                    name: url
-                    type: varchar(255)
-                    constraints:
-                        nullable: false
-
-               
-        - addForeignKeyConstraint:
-            constraintName: fk_app_order_app_store_branch
-            baseColumnNames: store_branch_id
-            baseTableName: app_order
-            referencedColumnNames: id
-            referencedTableName: app_store_branch
-            onDelete: CASCADE
-            onUpdate: RESTRICT
-            
-        - addForeignKeyConstraint:
-            constraintName: fk_app_order_app_user
-            baseColumnNames: user_id
-            baseTableName: app_order
-            referencedColumnNames: id
-            referencedTableName: app_user
-            onDelete: CASCADE
-            onUpdate: RESTRICT
             
         - addForeignKeyConstraint:
             constraintName: fk_app_order_item_app_order
