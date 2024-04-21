@@ -20,3 +20,13 @@ spring:
 logging:
     level:
         root: error
+
+crud:
+    categories: /categories
+
+server:
+    port: 8080
+
+springdoc:
+    api-docs:
+        path: /api-docs
