@@ -16,3 +16,7 @@ spring:
                     auto: none
         hibernate:
             ddl-auto: validate
+
+logging:
+    level:
+        root: error
