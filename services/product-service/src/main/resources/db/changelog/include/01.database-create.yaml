@@ -41,7 +41,13 @@ databaseChangeLog:
                     type: varchar(255)
                     constraints:
                         nullable: false
-        
+
+                - column:
+                      name: description
+                      type: clob
+                      constraints:
+                          nullable: false
+
         - createTable:
             tableName: app_user_review
             columns:

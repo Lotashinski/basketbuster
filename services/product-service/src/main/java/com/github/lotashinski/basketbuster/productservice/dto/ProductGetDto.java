@@ -5,10 +5,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public final class CategoryPostDto {
+public final class ProductGetDto {
+
+    private Long id;
 
     private String title;
 
-    private Long ownerId;
+    private String description;
 
 }

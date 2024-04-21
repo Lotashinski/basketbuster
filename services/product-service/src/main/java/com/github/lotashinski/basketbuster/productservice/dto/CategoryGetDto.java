@@ -6,13 +6,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CategoryGetDto {
+public final class CategoryGetDto {
 
     private Long id;
 
     private String title;
 
-    private String owner;
+    private Long ownerId;
 
     private Long childrenCount;
 
