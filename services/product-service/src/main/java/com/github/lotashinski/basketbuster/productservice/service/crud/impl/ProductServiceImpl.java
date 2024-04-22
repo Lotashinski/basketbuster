@@ -3,92 +3,69 @@ package com.github.lotashinski.basketbuster.productservice.service.crud.impl;
 import com.github.lotashinski.basketbuster.productservice.dto.ProductCriteria;
 import com.github.lotashinski.basketbuster.productservice.dto.ProductGetDto;
 import com.github.lotashinski.basketbuster.productservice.dto.ProductPostDto;
-import com.github.lotashinski.basketbuster.productservice.entity.Category;
 import com.github.lotashinski.basketbuster.productservice.entity.Product;
-import com.github.lotashinski.basketbuster.productservice.repository.CategoryRepository;
-import com.github.lotashinski.basketbuster.productservice.repository.ProductRepository;
 import com.github.lotashinski.basketbuster.productservice.service.crud.ProductService;
 import com.github.lotashinski.basketbuster.productservice.service.crud.converter.Converter;
 import com.github.lotashinski.basketbuster.productservice.service.crud.exception.NotFoundException;
+import com.github.lotashinski.basketbuster.productservice.service.jpa.JpaProductService;
+import com.github.lotashinski.basketbuster.productservice.service.jpa.criteria.JpaProductCriteria;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public final class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl implements ProductService {
 
-    private final ProductRepository productRepository;
+    private final JpaProductService jpaProductService;
 
-    private final CategoryRepository categoryRepository;
+    private final Converter<Product, ProductGetDto> productToDto;
 
-    private final Converter<Product, ProductGetDto> productGetDtoConverter;
+    private final Converter<ProductPostDto, Product> dtoToProduct;
 
-    private final Converter<ProductPostDto, Product> productPostDtoConverter;
+    private final Converter<ProductCriteria, JpaProductCriteria> crtiteriaConverter;
 
 
     @Override
     public Slice<ProductGetDto> get(ProductCriteria criteria) {
-        PageRequest pageRequest = PageRequestExtractor.extractPageRequest(criteria);
-        Function<ProductCriteria, Slice<Product>> extractor;
-        Long[] categoriesId = criteria.getCategories();
-
-        if (categoriesId == null || categoriesId.length == 0) {
-            extractor = c -> productRepository.findAll(pageRequest);
-        } else {
-            Set<Category> categories = getCategories(criteria);
-            extractor = c -> productRepository.findByCategories(categories, pageRequest);
-        }
-
-        return extractor.apply(criteria)
-                .map(p -> productGetDtoConverter.convert(p, new ProductGetDto()));
+        JpaProductCriteria c = crtiteriaConverter.convert(criteria, new JpaProductCriteria());
+        return jpaProductService.getByCriteria(c, PageRequestExtractor.extractPageRequest(criteria))
+                .map(p -> productToDto.convert(p, new ProductGetDto()));
     }
 
     @Override
     public ProductGetDto get(Long id) {
-        return productRepository.findById(id)
-                .map(p -> productGetDtoConverter.convert(p, new ProductGetDto()))
+        return jpaProductService.get(id)
+                .map(p -> productToDto.convert(p, new ProductGetDto()))
                 .orElseThrow(() -> createNotFoundException(id));
     }
 
     @Override
-    public ProductGetDto create(ProductPostDto categoryDto) {
-        Product product = productRepository.save(productPostDtoConverter.convert(categoryDto, new Product()));
+    public ProductGetDto create(ProductPostDto dto) {
+        Product product = dtoToProduct.convert(dto, new Product());
+        product = jpaProductService.create(product);
 
-        return productGetDtoConverter.convert(product, new ProductGetDto());
+        return productToDto.convert(product, new ProductGetDto());
     }
 
     @Override
-    public ProductGetDto update(Long id, ProductPostDto categoryDto) {
-        return null;
+    public ProductGetDto update(Long id, ProductPostDto dto) {
+        return jpaProductService.get(id)
+                .map(p -> dtoToProduct.convert(dto, p))
+                .map(jpaProductService::update)
+                .map(p -> productToDto.convert(p, new ProductGetDto()))
+                .orElseThrow(() -> createNotFoundException(id));
     }
 
     @Override
     public void delete(Long id) {
-
-    }
-
-    private Set<Category> getCategories(ProductCriteria criteria) {
-        return Arrays.stream(criteria.getCategories())
-                .map(this::getCategory)
-                .collect(Collectors.toSet());
-    }
-
-    private Category getCategory(Long id) {
-        Optional<Category> category = categoryRepository.findById(id);
-
-        return category.orElseThrow(() -> new NotFoundException(String.format("Category with id %s not found", id)));
+        jpaProductService.get(id)
+                .map(jpaProductService::delete)
+                .orElseThrow(() -> createNotFoundException(id));
     }
 
     private static NotFoundException createNotFoundException(Long id) {
         return new NotFoundException(String.format("Product with id %s not found", id));
     }
-
 }

@@ -11,9 +11,9 @@ public interface ProductService {
 
     ProductGetDto get(Long id);
 
-    ProductGetDto create(ProductPostDto categoryDto);
+    ProductGetDto create(ProductPostDto dto);
 
-    ProductGetDto update(Long id, ProductPostDto categoryDto);
+    ProductGetDto update(Long id, ProductPostDto dto);
 
     void delete(Long id);
 

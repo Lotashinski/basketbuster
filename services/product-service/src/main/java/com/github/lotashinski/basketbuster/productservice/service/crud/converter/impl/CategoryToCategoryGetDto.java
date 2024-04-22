@@ -6,7 +6,7 @@ import com.github.lotashinski.basketbuster.productservice.service.crud.converter
 import org.springframework.stereotype.Component;
 
 @Component
-class CategoryToCategoryDto implements Converter<Category, CategoryGetDto> {
+public final class CategoryToCategoryGetDto implements Converter<Category, CategoryGetDto> {
 
     @Override
     public CategoryGetDto convert(Category category, CategoryGetDto categoryDto) {

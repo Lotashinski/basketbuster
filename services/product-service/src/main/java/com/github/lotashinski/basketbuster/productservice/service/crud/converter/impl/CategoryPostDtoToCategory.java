@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryDtoToCategory implements Converter<CategoryPostDto, Category> {
+public final class CategoryPostDtoToCategory implements Converter<CategoryPostDto, Category> {
 
     private final CategoryRepository categoryRepository;
 
