@@ -23,6 +23,9 @@ public class User {
     
     @Column(name = "email", unique = true, nullable = false)
     private String email;
+
+    @Column(name = "username", nullable = false)
+    private String username;
     
     @OneToMany(mappedBy = "user")
     private Set<UserReview> reviews = new HashSet<>();

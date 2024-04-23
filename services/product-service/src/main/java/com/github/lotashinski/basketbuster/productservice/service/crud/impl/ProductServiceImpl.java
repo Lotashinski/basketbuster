@@ -2,8 +2,10 @@ package com.github.lotashinski.basketbuster.productservice.service.crud.impl;
 
 import com.github.lotashinski.basketbuster.productservice.dto.ProductCriteria;
 import com.github.lotashinski.basketbuster.productservice.dto.ProductGetDto;
+import com.github.lotashinski.basketbuster.productservice.dto.ProductItemDto;
 import com.github.lotashinski.basketbuster.productservice.dto.ProductPostDto;
 import com.github.lotashinski.basketbuster.productservice.entity.Product;
+import com.github.lotashinski.basketbuster.productservice.service.message.broker.ProductEventsSender;
 import com.github.lotashinski.basketbuster.productservice.service.crud.ProductService;
 import com.github.lotashinski.basketbuster.productservice.service.crud.converter.Converter;
 import com.github.lotashinski.basketbuster.productservice.service.crud.exception.NotFoundException;
@@ -26,12 +28,16 @@ public class ProductServiceImpl implements ProductService {
 
     private final Converter<ProductCriteria, JpaProductCriteria> crtiteriaConverter;
 
+    private final Converter<Product, ProductItemDto> productToItemDto;
+
+    private final ProductEventsSender productEventsSender;
+
 
     @Override
-    public Slice<ProductGetDto> get(ProductCriteria criteria) {
+    public Slice<ProductItemDto> get(ProductCriteria criteria) {
         JpaProductCriteria c = crtiteriaConverter.convert(criteria, new JpaProductCriteria());
         return jpaProductService.getByCriteria(c, PageRequestExtractor.extractPageRequest(criteria))
-                .map(p -> productToDto.convert(p, new ProductGetDto()));
+                .map(p -> productToItemDto.convert(p, new ProductItemDto()));
     }
 
     @Override
@@ -46,26 +52,34 @@ public class ProductServiceImpl implements ProductService {
         Product product = dtoToProduct.convert(dto, new Product());
         product = jpaProductService.create(product);
 
+        productEventsSender.create(product);
+
         return productToDto.convert(product, new ProductGetDto());
     }
 
     @Override
     public ProductGetDto update(Long id, ProductPostDto dto) {
-        return jpaProductService.get(id)
+        Product product = jpaProductService.get(id)
                 .map(p -> dtoToProduct.convert(dto, p))
                 .map(jpaProductService::update)
-                .map(p -> productToDto.convert(p, new ProductGetDto()))
                 .orElseThrow(() -> createNotFoundException(id));
+
+        productEventsSender.update(product);
+
+        return productToDto.convert(product, new ProductGetDto());
     }
 
     @Override
     public void delete(Long id) {
-        jpaProductService.get(id)
+        Product product = jpaProductService.get(id)
                 .map(jpaProductService::delete)
                 .orElseThrow(() -> createNotFoundException(id));
+
+        productEventsSender.delete(product);
     }
 
     private static NotFoundException createNotFoundException(Long id) {
         return new NotFoundException(String.format("Product with id %s not found", id));
     }
+
 }

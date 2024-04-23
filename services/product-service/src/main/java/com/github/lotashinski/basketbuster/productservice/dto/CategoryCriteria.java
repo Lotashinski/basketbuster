@@ -6,9 +6,11 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Null;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public final class CategoryCriteria implements Paginator {
 
     @Min(0)

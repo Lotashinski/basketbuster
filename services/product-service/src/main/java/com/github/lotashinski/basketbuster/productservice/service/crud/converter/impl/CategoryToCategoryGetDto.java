@@ -12,13 +12,13 @@ public final class CategoryToCategoryGetDto implements Converter<Category, Categ
     public CategoryGetDto convert(Category category, CategoryGetDto categoryDto) {
         categoryDto.setId(category.getId());
         categoryDto.setTitle(category.getTitle());
-        categoryDto.setOwnerId(extractOwnerUrl(category));
+        categoryDto.setOwnerId(extractOwnerId(category));
         categoryDto.setChildrenCount((long) category.getChildren().size());
 
         return categoryDto;
     }
 
-    private Long extractOwnerUrl(Category category) {
+    private Long extractOwnerId(Category category) {
         Category owner = category.getOwner();
         if (owner == null) {
             return null;

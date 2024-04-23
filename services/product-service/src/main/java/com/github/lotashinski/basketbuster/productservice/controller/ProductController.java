@@ -2,6 +2,7 @@ package com.github.lotashinski.basketbuster.productservice.controller;
 
 import com.github.lotashinski.basketbuster.productservice.dto.ProductCriteria;
 import com.github.lotashinski.basketbuster.productservice.dto.ProductGetDto;
+import com.github.lotashinski.basketbuster.productservice.dto.ProductItemDto;
 import com.github.lotashinski.basketbuster.productservice.dto.ProductPostDto;
 import com.github.lotashinski.basketbuster.productservice.service.crud.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<Slice<ProductGetDto>> getPage(ProductCriteria criteria) {
+    public ResponseEntity<Slice<ProductItemDto>> getPage(ProductCriteria criteria) {
         return ResponseEntity.ok(productService.get(criteria));
     }
 

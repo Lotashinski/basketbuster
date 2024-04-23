@@ -7,10 +7,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public final class CategoryPostDto {
+public class ProductItemDto {
+
+    private Long id;
 
     private String title;
-
-    private Long ownerId;
 
 }
