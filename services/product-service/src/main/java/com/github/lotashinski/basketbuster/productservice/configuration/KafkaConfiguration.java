@@ -1,6 +1,5 @@
 package com.github.lotashinski.basketbuster.productservice.configuration;
 
-import com.github.lotashinski.basketbuster.productservice.service.message.broker.dto.Message;
 import com.github.lotashinski.basketbuster.productservice.service.message.broker.dto.ProductDto;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -25,23 +24,20 @@ public class KafkaConfiguration {
 
 
     @Bean
-    public ProducerFactory<String, Message<ProductDto>> producerFactory() {
+    public ProducerFactory<String, ProductDto> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
-        configProps.put(
-                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                bootstrapServers);
-        configProps.put(
-                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-                StringSerializer.class);
-        configProps.put(
-                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                JsonSerializer.class);
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        configProps.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, false);
+
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 
     @Bean
-    public KafkaTemplate<String, Message<ProductDto>> kafkaTemplate(
-            ProducerFactory<String, Message<ProductDto>> producerFactory) {
+    public KafkaTemplate<String, ProductDto> kafkaTemplate(
+            ProducerFactory<String, ProductDto> producerFactory) {
+
         return new KafkaTemplate<>(producerFactory);
     }
 

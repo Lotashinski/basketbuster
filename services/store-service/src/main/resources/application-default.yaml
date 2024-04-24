@@ -1,6 +1,8 @@
 spring:
     application:
         name: store-service
+    kafka:
+        bootstrap-servers: ${KAFKA_SERVERS}
     datasource:
         username: ${POSTGRES_DB_USER}
         password: ${POSTGRES_DB_PASSWORD}

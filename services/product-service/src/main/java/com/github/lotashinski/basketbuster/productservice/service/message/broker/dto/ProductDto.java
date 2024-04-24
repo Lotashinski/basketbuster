@@ -13,4 +13,5 @@ public class ProductDto {
 
     private String title;
 
+    private Event event;
 }

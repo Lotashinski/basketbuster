@@ -1,10 +1,10 @@
-package com.github.lotashinski.basketbuster.storeservice.service.message.broker.impl;
+package com.github.lotashinski.basketbuster.userservice.service.message.broker.impl;
 
-import com.github.lotashinski.basketbuster.storeservice.entity.Product;
-import com.github.lotashinski.basketbuster.storeservice.service.converter.Converter;
-import com.github.lotashinski.basketbuster.storeservice.service.jpa.JpaProductService;
-import com.github.lotashinski.basketbuster.storeservice.service.message.broker.ProductListener;
-import com.github.lotashinski.basketbuster.storeservice.service.message.broker.dto.ProductDto;
+import com.github.lotashinski.basketbuster.userservice.entity.Product;
+import com.github.lotashinski.basketbuster.userservice.service.converter.Converter;
+import com.github.lotashinski.basketbuster.userservice.service.jpa.JpaProductService;
+import com.github.lotashinski.basketbuster.userservice.service.message.broker.ProductListener;
+import com.github.lotashinski.basketbuster.userservice.service.message.broker.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

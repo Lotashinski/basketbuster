@@ -1,6 +1,6 @@
-package com.github.lotashinski.basketbuster.storeservice.configuration;
+package com.github.lotashinski.basketbuster.orderservice.configuration;
 
-import com.github.lotashinski.basketbuster.storeservice.service.message.broker.dto.ProductDto;
+import com.github.lotashinski.basketbuster.orderservice.service.message.broker.dto.ProductDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;

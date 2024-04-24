@@ -1,4 +1,4 @@
-package com.github.lotashinski.basketbuster.storeservice.service.message.broker.dto;
+package com.github.lotashinski.basketbuster.orderservice.service.message.broker.dto;
 
 import lombok.*;
 

@@ -8,6 +8,8 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import java.math.BigDecimal;
+
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +21,7 @@ public class BranchProduct {
     @Getter
     @Setter
     @Embeddable
+    @EqualsAndHashCode
     public static class BranchProductPk {
 
         @ManyToOne

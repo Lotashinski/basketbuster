@@ -1,8 +1,8 @@
-package com.github.lotashinski.basketbuster.storeservice.service.message.broker.impl;
+package com.github.lotashinski.basketbuster.userservice.service.message.broker.impl;
 
-import com.github.lotashinski.basketbuster.storeservice.service.message.broker.ProductListener;
-import com.github.lotashinski.basketbuster.storeservice.service.message.broker.Receiver;
-import com.github.lotashinski.basketbuster.storeservice.service.message.broker.dto.ProductDto;
+import com.github.lotashinski.basketbuster.userservice.service.message.broker.ProductListener;
+import com.github.lotashinski.basketbuster.userservice.service.message.broker.Receiver;
+import com.github.lotashinski.basketbuster.userservice.service.message.broker.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class ProductReceiver implements Receiver<ProductDto> {
 
     private final ProductListener productListener;
+
 
     @KafkaListener(
             groupId = "${spring.application.name}",
@@ -45,4 +46,5 @@ public class ProductReceiver implements Receiver<ProductDto> {
                 break;
         }
     }
+
 }

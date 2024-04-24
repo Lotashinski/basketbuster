@@ -4,7 +4,6 @@ import com.github.lotashinski.basketbuster.productservice.entity.Product;
 import com.github.lotashinski.basketbuster.productservice.service.message.broker.ProductEventsSender;
 import com.github.lotashinski.basketbuster.productservice.service.message.broker.Transmitter;
 import com.github.lotashinski.basketbuster.productservice.service.message.broker.dto.Event;
-import com.github.lotashinski.basketbuster.productservice.service.message.broker.dto.Message;
 import com.github.lotashinski.basketbuster.productservice.service.message.broker.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -33,16 +32,15 @@ public class ProductSenderImpl implements ProductEventsSender {
 
 
     private void send(Product product, Event event) {
-        Message<ProductDto> message = createMessage(product, event);
+        ProductDto message = createMessage(product, event);
         transmitter.send(message);
     }
 
-    private Message<ProductDto> createMessage(Product product, Event eventType) {
-        return Message.<ProductDto>builder()
-                .topic("products")
-                .value(createDto(product))
-                .event(eventType)
-                .build();
+    private ProductDto createMessage(Product product, Event eventType) {
+        ProductDto dto = createDto(product);
+        dto.setEvent(eventType);
+
+        return dto;
     }
 
     private ProductDto createDto(Product product) {
