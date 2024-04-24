@@ -1,8 +1,11 @@
 spring:
-    kafka:
-        bootstrap-servers: localhost:9092
     application:
         name: product-service
+    kafka:
+        bootstrap-servers: ${KAFKA_SERVERS}
+        producer:
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     datasource:
         username: ${POSTGRES_DB_USER}
         password: ${POSTGRES_DB_PASSWORD}

@@ -1,9 +1,9 @@
-package com.github.lotashinski.basketbuster.productservice.service.crud.converter.impl;
+package com.github.lotashinski.basketbuster.productservice.service.converter.impl;
 
 import com.github.lotashinski.basketbuster.productservice.dto.CategoryPostDto;
 import com.github.lotashinski.basketbuster.productservice.entity.Category;
 import com.github.lotashinski.basketbuster.productservice.repository.CategoryRepository;
-import com.github.lotashinski.basketbuster.productservice.service.crud.converter.Converter;
+import com.github.lotashinski.basketbuster.productservice.service.converter.Converter;
 import com.github.lotashinski.basketbuster.productservice.service.crud.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

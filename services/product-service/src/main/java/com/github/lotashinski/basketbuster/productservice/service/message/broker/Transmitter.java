@@ -2,6 +2,6 @@ package com.github.lotashinski.basketbuster.productservice.service.message.broke
 
 import com.github.lotashinski.basketbuster.productservice.service.message.broker.dto.Message;
 
-public interface Sender<T> {
+public interface Transmitter<T> {
     void send(Message<T> message);
 }

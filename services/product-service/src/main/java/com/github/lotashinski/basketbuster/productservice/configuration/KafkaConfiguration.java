@@ -1,5 +1,6 @@
 package com.github.lotashinski.basketbuster.productservice.configuration;
 
+import com.github.lotashinski.basketbuster.productservice.service.message.broker.dto.Message;
 import com.github.lotashinski.basketbuster.productservice.service.message.broker.dto.ProductDto;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -22,8 +23,9 @@ public class KafkaConfiguration {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
+
     @Bean
-    public ProducerFactory<String, ProductDto> producerFactory() {
+    public ProducerFactory<String, Message<ProductDto>> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(
                 ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -38,8 +40,9 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public KafkaTemplate<String, ProductDto> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+    public KafkaTemplate<String, Message<ProductDto>> kafkaTemplate(
+            ProducerFactory<String, Message<ProductDto>> producerFactory) {
+        return new KafkaTemplate<>(producerFactory);
     }
 
     @Bean

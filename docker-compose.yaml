@@ -3,33 +3,45 @@ services:
 
   zookeeper:
     container_name: zookeeper
-    image: confluentinc/cp-zookeeper:latest
+    image: bitnami/zookeeper:latest
+    restart: unless-stopped
+    networks:
+      - internal
     environment:
+      ALLOW_ANONYMOUS_LOGIN: yes
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "2181:2181"
+    volumes:
+      - zookeeper:/bitnami
 
   kafka:
     container_name: kafka
-    image: confluentinc/cp-kafka:latest
+    image: bitnami/kafka:latest
+    restart: unless-stopped
+    networks:
+      - internal
     depends_on:
       - zookeeper
     ports:
       - "9092:9092"
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CFG_ADVERTISED_LISTENERS: INTERNAL://kafka:29092,EXTERNAL://localhost:9092
+      KAFKA_CFG_LISTENERS: INTERNAL://:29092,EXTERNAL://:9092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - kafka:/bitnami/kafka
 
-  postgres-user-service:
+  postgres-user:
+    container_name: postgres-user
     image: postgres:13.3
     networks:
       - internal
-    container_name: postgres-user-service
     environment:
       POSTGRES_DB: ${USER_SERVICE_DB_NAME:-app}
       POSTGRES_USER: ${USER_SERVICE_DB_USER:?error}
@@ -37,28 +49,13 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./volumes/user-service-db:/var/lib/postgresql/data
+      - ./volumes/service-user-db:/var/lib/postgresql/data
 
-  user-service:
-    build: ./services/user-service
-    container_name: user-service
-    networks:
-      - internal
-    environment:
-      POSTGRES_DB_NAME: ${USER_SERVICE_DB_NAME:-app}
-      POSTGRES_DB_USER: ${USER_SERVICE_DB_USER:?error}
-      POSTGRES_DB_PASSWORD: ${USER_SERVICE_DB_PASSWORD:?error}
-      POSTGRES_DB_HOST: ${USER_SERVICE_DB_HOST:-postgres-user-service}
-      POSTGRES_DB_PORT: ${USER_SERVICE_DB_PORT:-5432}
-    depends_on:
-      - postgres-user-service
-
-
-  postgres-store-service:
+  postgres-store:
+    container_name: postgres-store
     image: postgres:13.3
     networks:
       - internal
-    container_name: postgres-store-service
     environment:
       POSTGRES_DB: ${STORE_SERVICE_DB_NAME:-app}
       POSTGRES_USER: ${STORE_SERVICE_DB_USER:?error}
@@ -66,58 +63,13 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - ./volumes/store-service-db:/var/lib/postgresql/data
+      - ./volumes/service-store-db:/var/lib/postgresql/data
 
-  store-service:
-    build: ./services/store-service
-    container_name: store-service
-    networks:
-      - internal
-    environment:
-      POSTGRES_DB_NAME: ${STORE_SERVICE_DB_NAME:-app}
-      POSTGRES_DB_USER: ${STORE_SERVICE_DB_USER:?error}
-      POSTGRES_DB_PASSWORD: ${STORE_SERVICE_DB_PASSWORD:?error}
-      POSTGRES_DB_HOST: ${STORE_SERVICE_DB_HOST:-postgres-store-service}
-      POSTGRES_DB_PORT: ${STORE_SERVICE_DB_PORT:-5432}
-    depends_on:
-      - postgres-store-service
-
-
-  postgres-product-service:
+  postgres-order:
+    container_name: postgres-order
     image: postgres:13.3
     networks:
       - internal
-    container_name: postgres-product-service
-    environment:
-      POSTGRES_DB: ${PRODUCT_SERVICE_DB_NAME:-app}
-      POSTGRES_USER: ${PRODUCT_SERVICE_DB_USER:?error}
-      POSTGRES_PASSWORD: ${PRODUCT_SERVICE_DB_PASSWORD:?error}
-    ports:
-      - "5434:5432"
-    volumes:
-      - ./volumes/product-service-db:/var/lib/postgresql/data
-
-  product-service:
-    build: ./services/product-service
-    container_name: product-service
-    ports:
-      - "8080:8080"
-    networks:
-      - internal
-    environment:
-      POSTGRES_DB_NAME: ${PRODUCT_SERVICE_DB_NAME:-app}
-      POSTGRES_DB_USER: ${PRODUCT_SERVICE_DB_USER:?error}
-      POSTGRES_DB_PASSWORD: ${PRODUCT_SERVICE_DB_PASSWORD:?error}
-      POSTGRES_DB_HOST: ${PRODUCT_SERVICE_DB_HOST:-postgres-product-service}
-      POSTGRES_DB_PORT: ${PRODUCT_SERVICE_DB_PORT:-5432}
-    depends_on:
-      - postgres-product-service
-
-  postgres-order-service:
-    image: postgres:13.3
-    networks:
-      - internal
-    container_name: postgres-order-service
     environment:
       POSTGRES_DB: ${ORDER_SERVICE_DB_NAME:-app}
       POSTGRES_USER: ${ORDER_SERVICE_DB_USER:?error}
@@ -125,22 +77,85 @@ services:
     ports:
       - "5435:5432"
     volumes:
-      - ./volumes/order-service-db:/var/lib/postgresql/data
+      - ./volumes/service-order-db:/var/lib/postgresql/data
 
-  order-service:
+  postgres-product:
+    container_name: postgres-product
+    image: postgres:13.3
+    networks:
+      - internal
+    environment:
+      POSTGRES_DB: ${PRODUCT_SERVICE_DB_NAME:-app}
+      POSTGRES_USER: ${PRODUCT_SERVICE_DB_USER:?error}
+      POSTGRES_PASSWORD: ${PRODUCT_SERVICE_DB_PASSWORD:?error}
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./volumes/service-product-db:/var/lib/postgresql/data
+  
+  service-user:
+    container_name: service-user
+    build: ./services/user-service
+    networks:
+      - internal
+    environment:
+      POSTGRES_DB_NAME: ${USER_SERVICE_DB_NAME:-app}
+      POSTGRES_DB_USER: ${USER_SERVICE_DB_USER:?error}
+      POSTGRES_DB_PASSWORD: ${USER_SERVICE_DB_PASSWORD:?error}
+      POSTGRES_DB_HOST: ${USER_SERVICE_DB_HOST:-postgres-user}
+      POSTGRES_DB_PORT: ${USER_SERVICE_DB_PORT:-5432}
+    depends_on:
+      - postgres-user
+
+  service-store:
+    container_name: service-store
+    build: ./services/store-service
+    networks:
+      - internal
+    environment:
+      POSTGRES_DB_NAME: ${STORE_SERVICE_DB_NAME:-app}
+      POSTGRES_DB_USER: ${STORE_SERVICE_DB_USER:?error}
+      POSTGRES_DB_PASSWORD: ${STORE_SERVICE_DB_PASSWORD:?error}
+      POSTGRES_DB_HOST: ${STORE_SERVICE_DB_HOST:-postgres-store}
+      POSTGRES_DB_PORT: ${STORE_SERVICE_DB_PORT:-5432}
+    depends_on:
+      - postgres-store
+  
+  service-product:
+    container_name: service-product
+    build: ./services/product-service
+    ports:
+      - "8082:8080"
+    networks:
+      - internal
+    environment:
+      KAFKA_SERVERS: ${KAFKA_SERVERS:-kafka:9092}
+      POSTGRES_DB_NAME: ${PRODUCT_SERVICE_DB_NAME:-app}
+      POSTGRES_DB_USER: ${PRODUCT_SERVICE_DB_USER:?error}
+      POSTGRES_DB_PASSWORD: ${PRODUCT_SERVICE_DB_PASSWORD:?error}
+      POSTGRES_DB_HOST: ${PRODUCT_SERVICE_DB_HOST:-postgres-product}
+      POSTGRES_DB_PORT: ${PRODUCT_SERVICE_DB_PORT:-5432}
+    depends_on:
+      - postgres-product
+      - kafka
+
+  service-order:
+    container_name: service-order
     build: ./services/order-service
-    container_name: order-service
     networks:
       - internal
     environment:
       POSTGRES_DB_NAME: ${ORDER_SERVICE_DB_NAME:-app}
       POSTGRES_DB_USER: ${ORDER_SERVICE_DB_USER:?error}
       POSTGRES_DB_PASSWORD: ${ORDER_SERVICE_DB_PASSWORD:?error}
-      POSTGRES_DB_HOST: ${ORDER_SERVICE_DB_HOST:-postgres-order-service}
+      POSTGRES_DB_HOST: ${ORDER_SERVICE_DB_HOST:-postgres-order}
       POSTGRES_DB_PORT: ${ORDER_SERVICE_DB_PORT:-5432}
     depends_on:
-      - postgres-order-service
+      - postgres-order
 
+volumes:
+  zookeeper:
+  kafka:
 
 networks:
   internal:

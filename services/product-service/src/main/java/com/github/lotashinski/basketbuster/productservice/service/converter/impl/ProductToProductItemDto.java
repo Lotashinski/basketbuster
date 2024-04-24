@@ -1,8 +1,8 @@
-package com.github.lotashinski.basketbuster.productservice.service.crud.converter.impl;
+package com.github.lotashinski.basketbuster.productservice.service.converter.impl;
 
 import com.github.lotashinski.basketbuster.productservice.dto.ProductItemDto;
 import com.github.lotashinski.basketbuster.productservice.entity.Product;
-import com.github.lotashinski.basketbuster.productservice.service.crud.converter.Converter;
+import com.github.lotashinski.basketbuster.productservice.service.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
