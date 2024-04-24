@@ -3,13 +3,13 @@ package com.github.lotashinski.basketbuster.productservice.controller;
 import com.github.lotashinski.basketbuster.productservice.dto.*;
 import com.github.lotashinski.basketbuster.productservice.service.crud.ProductCategoryService;
 import com.github.lotashinski.basketbuster.productservice.service.crud.ProductService;
+import com.github.lotashinski.basketbuster.productservice.service.crud.ProductUserReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,6 +19,8 @@ public class ProductController {
     private final ProductService productService;
 
     private final ProductCategoryService productCategoryService;
+
+    private final ProductUserReviewService productUserReviewService;
 
 
     @GetMapping
@@ -50,7 +52,7 @@ public class ProductController {
 
     @GetMapping("/{id}/categories")
     public ResponseEntity<Collection<CategoryItemGetDto>> getCategories(@PathVariable Long id) {
-        return ResponseEntity.ok(productCategoryService.getProductCategories(id));
+        return ResponseEntity.ok(productCategoryService.getCategories(id));
     }
 
     @PostMapping("/{id}/categories")
@@ -66,4 +68,8 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/{id}/reviews")
+    public ResponseEntity<Collection<UserReviewItemDto>> getReviews(@PathVariable Long id) {
+        return ResponseEntity.ok(productUserReviewService.getUserReviews(id));
+    }
 }

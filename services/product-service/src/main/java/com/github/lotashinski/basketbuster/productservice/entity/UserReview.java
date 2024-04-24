@@ -17,4 +17,10 @@ public class UserReview {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Column(name = "username", nullable = false)
+    private String username;
+
+    @Column(name = "start", nullable = false)
+    private Integer stars;
+
 }

@@ -30,7 +30,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
 
     @Override
-    public Collection<CategoryItemGetDto> getProductCategories(Long productId) {
+    public Collection<CategoryItemGetDto> getCategories(Long productId) {
         log.info("Get product categories for {}", productId);
 
         Collection<Category> categories = jpaProductService.get(productId)

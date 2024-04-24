@@ -24,25 +24,25 @@ public class JpaProductCategoryServiceImpl implements JpaProductCategoryService 
 
     @Transactional
     @Override
-    public Collection<Category> addToProduct(Product product, Collection<Category> category) {
-        product.getCategories().addAll(category);
+    public Collection<Category> addToProduct(Product product, Collection<Category> categories) {
+        product.getCategories().addAll(categories);
+        categories.forEach(c -> c.getProducts().add(product));
 
         entityManager.persist(product);
-        entityManager.flush();
 
-        return category;
+        return categories;
     }
 
     @Transactional
     @Override
-    public Collection<Category> removeFromProduct(Product product, Collection<Category> category) {
-        category.retainAll(product.getCategories());
-        product.getCategories().removeAll(category);
+    public Collection<Category> removeFromProduct(Product product, Collection<Category> categories) {
+        categories.retainAll(product.getCategories());
+        product.getCategories().removeAll(categories);
+        categories.forEach(c -> c.getProducts().remove(product));
 
         entityManager.persist(product);
-        entityManager.flush();
 
-        return category;
+        return categories;
     }
 
 }

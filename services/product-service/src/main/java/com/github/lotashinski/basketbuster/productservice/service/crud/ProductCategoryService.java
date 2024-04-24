@@ -6,7 +6,7 @@ import java.util.Collection;
 
 public interface ProductCategoryService {
 
-    Collection<CategoryItemGetDto> getProductCategories(Long productId);
+    Collection<CategoryItemGetDto> getCategories(Long productId);
 
     Collection<CategoryItemGetDto> deleteCategories(Long productId, Collection<Long> categories);
 
