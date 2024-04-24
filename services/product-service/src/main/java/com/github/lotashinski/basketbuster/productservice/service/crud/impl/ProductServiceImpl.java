@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ProductServiceImpl implements ProductService {
+public final class ProductServiceImpl implements ProductService {
 
     private final JpaProductService jpaProductService;
 

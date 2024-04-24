@@ -27,7 +27,7 @@ public class ProductSenderImpl implements ProductEventsSender {
 
     @Override
     public void delete(Product product) {
-        send(product, Event.UPDATE);
+        send(product, Event.DELETE);
     }
 
 
