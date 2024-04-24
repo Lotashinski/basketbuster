@@ -1,10 +1,8 @@
 package com.github.lotashinski.basketbuster.productservice.service.crud;
 
-import com.github.lotashinski.basketbuster.productservice.dto.ProductCriteria;
-import com.github.lotashinski.basketbuster.productservice.dto.ProductGetDto;
-import com.github.lotashinski.basketbuster.productservice.dto.ProductItemDto;
-import com.github.lotashinski.basketbuster.productservice.dto.ProductPostDto;
+import com.github.lotashinski.basketbuster.productservice.dto.*;
 import org.springframework.data.domain.Slice;
+
 
 public interface ProductService {
 

@@ -5,6 +5,7 @@ import com.github.lotashinski.basketbuster.productservice.service.jpa.criteria.J
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
+import java.util.Collection;
 import java.util.Optional;
 
 public interface JpaProductService {

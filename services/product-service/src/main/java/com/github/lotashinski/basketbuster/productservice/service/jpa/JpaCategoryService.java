@@ -4,7 +4,9 @@ import com.github.lotashinski.basketbuster.productservice.entity.Category;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
+import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 public interface JpaCategoryService {
 
@@ -19,4 +21,7 @@ public interface JpaCategoryService {
     Slice<Category> getMainCategories(Pageable pageable);
 
     Slice<Category> getSubCategories(Category owner, Pageable pageable);
+
+    Set<Category> getAllByIds(Collection<Long> ids);
+
 }

@@ -1,14 +1,15 @@
 package com.github.lotashinski.basketbuster.productservice.controller;
 
-import com.github.lotashinski.basketbuster.productservice.dto.ProductCriteria;
-import com.github.lotashinski.basketbuster.productservice.dto.ProductGetDto;
-import com.github.lotashinski.basketbuster.productservice.dto.ProductItemDto;
-import com.github.lotashinski.basketbuster.productservice.dto.ProductPostDto;
+import com.github.lotashinski.basketbuster.productservice.dto.*;
+import com.github.lotashinski.basketbuster.productservice.service.crud.ProductCategoryService;
 import com.github.lotashinski.basketbuster.productservice.service.crud.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     private final ProductService productService;
+
+    private final ProductCategoryService productCategoryService;
+
 
     @GetMapping
     public ResponseEntity<Slice<ProductItemDto>> getPage(ProductCriteria criteria) {
@@ -40,12 +44,26 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         productService.delete(id);
+
         return ResponseEntity.noContent().build();
     }
-//
-//    @GetMapping
-//    public ResponseEntity<Slice<Cate>> getAll(@PathVariable Long id) {
-//
-//    }
+
+    @GetMapping("/{id}/categories")
+    public ResponseEntity<Collection<CategoryItemGetDto>> getCategories(@PathVariable Long id) {
+        return ResponseEntity.ok(productCategoryService.getProductCategories(id));
+    }
+
+    @PostMapping("/{id}/categories")
+    public ResponseEntity<Collection<CategoryItemGetDto>> addCategories(@PathVariable Long id,
+                                                                        @RequestBody Collection<Long> categories) {
+        return ResponseEntity.ok(productCategoryService.addCategories(id, categories));
+    }
+
+    @DeleteMapping("/{id}/categories")
+    public ResponseEntity<Void> deleteCategories(@PathVariable Long id, @RequestBody Collection<Long> categories) {
+        productCategoryService.deleteCategories(id, categories);
+
+        return ResponseEntity.noContent().build();
+    }
 
 }

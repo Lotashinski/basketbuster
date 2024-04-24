@@ -1,9 +1,6 @@
 package com.github.lotashinski.basketbuster.productservice.service.crud.impl;
 
-import com.github.lotashinski.basketbuster.productservice.dto.ProductCriteria;
-import com.github.lotashinski.basketbuster.productservice.dto.ProductGetDto;
-import com.github.lotashinski.basketbuster.productservice.dto.ProductItemDto;
-import com.github.lotashinski.basketbuster.productservice.dto.ProductPostDto;
+import com.github.lotashinski.basketbuster.productservice.dto.*;
 import com.github.lotashinski.basketbuster.productservice.entity.Product;
 import com.github.lotashinski.basketbuster.productservice.service.converter.Converter;
 import com.github.lotashinski.basketbuster.productservice.service.crud.ProductService;
@@ -31,6 +28,7 @@ public final class ProductServiceImpl implements ProductService {
     private final Converter<Product, ProductItemDto> productToItemDto;
 
     private final ProductEventsSender productEventsSender;
+
 
 
     @Override

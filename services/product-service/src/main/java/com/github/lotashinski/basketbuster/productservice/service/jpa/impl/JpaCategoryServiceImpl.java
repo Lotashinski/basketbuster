@@ -12,9 +12,11 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -80,6 +82,12 @@ public class JpaCategoryServiceImpl implements JpaCategoryService {
         return categoryRepository.findAllByOwner(owner, pageable);
     }
 
+    @Override
+    public Set<Category> getAllByIds(Collection<Long> ids) {
+        return new HashSet<>(categoryRepository.findAllById(ids));
+    }
+
+
     private boolean isHierarchyValid(Category category) {
         Set<Long> ids = new HashSet<>();
         while (category != null) {
@@ -97,4 +105,5 @@ public class JpaCategoryServiceImpl implements JpaCategoryService {
     private static CategoryTitleAlreadyExistsException createAlreadyExistsException(String title) {
         return new CategoryTitleAlreadyExistsException("Category with title '" + title + "' already exists");
     }
+
 }
