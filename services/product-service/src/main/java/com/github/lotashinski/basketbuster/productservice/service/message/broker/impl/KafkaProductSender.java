@@ -17,7 +17,7 @@ public class KafkaProductSender implements Transmitter<Long, ProductDto> {
     @Override
     public void send(Long key, ProductDto message) {
         log.info("Try to send message: {}", message);
-        kafkaTemplate.send("products", message);
+        kafkaTemplate.send("products", key.toString(), message);
     }
 
 }
