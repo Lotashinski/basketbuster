@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class KafkaProductSender implements Transmitter<ProductDto> {
+public class KafkaProductSender implements Transmitter<Long, ProductDto> {
 
     private final KafkaTemplate<String, ProductDto> kafkaTemplate;
 
     @Override
-    public void send(ProductDto message) {
+    public void send(Long key, ProductDto message) {
         log.info("Try to send message: {}", message);
         kafkaTemplate.send("products", message);
     }

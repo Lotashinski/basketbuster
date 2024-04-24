@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ProductSenderImpl implements ProductEventsSender {
 
-    private final Transmitter<ProductDto> transmitter;
+    private final Transmitter<Long, ProductDto> transmitter;
 
 
     @Override
@@ -33,7 +33,7 @@ public class ProductSenderImpl implements ProductEventsSender {
 
     private void send(Product product, Event event) {
         ProductDto message = createMessage(product, event);
-        transmitter.send(message);
+        transmitter.send(message.getId(), message);
     }
 
     private ProductDto createMessage(Product product, Event eventType) {
