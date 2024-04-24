@@ -38,8 +38,14 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         productService.delete(id);
         return ResponseEntity.noContent().build();
     }
+//
+//    @GetMapping
+//    public ResponseEntity<Slice<Cate>> getAll(@PathVariable Long id) {
+//
+//    }
+
 }

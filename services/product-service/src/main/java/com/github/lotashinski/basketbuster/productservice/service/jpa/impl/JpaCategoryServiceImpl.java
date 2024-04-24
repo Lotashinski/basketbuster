@@ -87,6 +87,7 @@ public class JpaCategoryServiceImpl implements JpaCategoryService {
                 return false;
             }
             ids.add(category.getId());
+            category = category.getOwner();
         }
 
         return true;
